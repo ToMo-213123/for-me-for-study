@@ -1,0 +1,3200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公民問題集 - 裁判所・国会 全網羅</title>
+<style>
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --primary: #2c5282;
+  --primary-light: #ebf2fb;
+  --accent: #dd6b20;
+  --accent-light: #fef5e7;
+  --success: #2f855a;
+  --success-light: #f0fff4;
+  --danger: #c53030;
+  --danger-light: #fff5f5;
+  --muted: #718096;
+  --border: #e2e8f0;
+  --text: #1a202c;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 0;
+  min-height: 100vh;
+}
+header {
+  background: linear-gradient(135deg, var(--primary) 0%, #1a365d 100%);
+  color: white;
+  padding: 24px 20px;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+header .container {
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+header .subtitle {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+header .stats {
+  font-size: 13px;
+  background: rgba(255,255,255,0.15);
+  padding: 6px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+/* === スタート画面 === */
+.screen-start {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: var(--shadow);
+}
+.screen-start h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+.screen-start p.lead {
+  color: var(--muted);
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 24px 0 10px;
+}
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.option-card {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: white;
+  text-align: center;
+  user-select: none;
+}
+.option-card:hover { border-color: var(--primary); background: var(--primary-light); }
+.option-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(44,82,130,0.1);
+}
+.option-card .icon { font-size: 24px; margin-bottom: 6px; display:block; }
+.option-card .title { font-weight: 700; font-size: 15px; }
+.option-card .desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.wrong-only-card {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--accent-light);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.wrong-only-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.wrong-only-card .title { font-weight: 700; color: var(--accent); }
+.wrong-only-card .desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.btn-start {
+  display: block;
+  width: 100%;
+  margin-top: 24px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.btn-start:hover { background: #1a365d; }
+.btn-start:disabled { background: #a0aec0; cursor: not-allowed; }
+
+.btn-reset {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--border);
+  padding: 10px;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-reset:hover { background: var(--danger-light); }
+
+/* === 問題画面 === */
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.quiz-progress {
+  font-size: 13px;
+  color: var(--muted);
+}
+.quiz-progress .num { color: var(--primary); font-weight: 700; }
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.progress-bar > div {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+.quiz-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.quiz-meta {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+}
+.tag.sub {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.question-text {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 2.0;
+}
+.blank-input {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 120px;
+  margin: 0 4px;
+  vertical-align: baseline;
+  position: relative;
+  top: 4px;
+}
+.blank-input input {
+  width: 100%;
+  padding: 2px 8px;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  font-size: 15px;
+  background: var(--primary-light);
+  font-family: inherit;
+  color: var(--primary);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.6;
+  height: 1.9em;
+}
+.blank-input input::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+}
+.blank-input input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: white;
+  box-shadow: 0 0 0 2px rgba(221,107,32,0.15);
+}
+.blank-input.answered.correct input {
+  border-color: var(--success);
+  background: var(--success-light);
+  color: var(--success);
+}
+.blank-input.answered.wrong input {
+  border-color: var(--danger);
+  background: var(--danger-light);
+  color: var(--danger);
+}
+.blank-hint {
+  display: block;
+  font-size: 11px;
+  color: #666;
+  margin-top: 3px;
+  text-align: center;
+  background: #fff8e1;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px dashed #ffd54f;
+  line-height: 1.4;
+}
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.choice {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  user-select: none;
+}
+.choice:hover { border-color: var(--primary); background: var(--primary-light); }
+.choice .marker {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.choice.selected { border-color: var(--primary); background: var(--primary-light); }
+.choice.selected .marker { background: var(--primary); color: white; border-color: var(--primary); }
+.choice.correct { border-color: var(--success); background: var(--success-light); }
+.choice.correct .marker { background: var(--success); color: white; border-color: var(--success); }
+.choice.wrong { border-color: var(--danger); background: var(--danger-light); }
+.choice.wrong .marker { background: var(--danger); color: white; border-color: var(--danger); }
+.choice .label { font-size: 15px; }
+
+.feedback {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: none;
+}
+.feedback.show { display: block; }
+.feedback.correct {
+  background: var(--success-light);
+  border-left: 4px solid var(--success);
+  color: var(--success);
+}
+.feedback.wrong {
+  background: var(--danger-light);
+  border-left: 4px solid var(--danger);
+  color: var(--danger);
+}
+.feedback .answer-line { font-weight: 700; margin-bottom: 4px; }
+.feedback .explanation { color: var(--text); margin-top: 6px; font-size: 13px; }
+
+.quiz-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: #1a365d; }
+.btn-primary:disabled { background: #cbd5e0; cursor: not-allowed; box-shadow: none; }
+.btn-secondary { background: white; color: var(--primary); border: 2px solid var(--border); }
+.btn-secondary:hover { border-color: var(--primary); background: var(--primary-light); }
+
+/* === 結果画面 === */
+.screen-result {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.result-icon {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+.result-score {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 8px 0;
+}
+.result-score small { font-size: 20px; color: var(--muted); font-weight: 500; }
+.result-msg {
+  color: var(--muted);
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+.result-detail {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: left;
+  font-size: 13px;
+}
+.result-detail .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.result-detail .row:last-child { border-bottom: none; }
+.result-detail .row .label { color: var(--muted); }
+.result-detail .row .val { font-weight: 700; }
+.result-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.wrong-list {
+  text-align: left;
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.wrong-list h3 { font-size: 14px; color: var(--danger); margin-bottom: 10px; }
+.wrong-list ul { list-style: none; }
+.wrong-list li {
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+  color: var(--muted);
+}
+.wrong-list li:last-child { border: none; }
+
+.hidden { display: none !important; }
+
+@media (max-width: 640px) {
+  header h1 { font-size: 18px; }
+  .quiz-card { padding: 20px 16px; }
+  .question-text { font-size: 15px; }
+  .blank-input { min-width: 90px; }
+  .choice { padding: 12px; }
+  .choice .label { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div>
+      <h1>公民問題集 - 裁判所・国会 全網羅</h1>
+      <div class="subtitle">中3公民 政治分野 / 書込み式・選択式 / ランダム出題</div>
+    </div>
+    <div class="stats" id="header-stats">問題数: 0</div>
+  </div>
+</header>
+<main>
+  <!-- スタート画面 -->
+  <div id="screen-start" class="screen-start">
+    <h2>学習を始めよう</h2>
+    <p class="lead">範囲を選んで「開始」を押してください。空欄位置・選択肢順序は毎回ランダムに変わります。</p>
+
+    <div class="section-label">出題範囲</div>
+    <div class="option-grid" id="cat-options">
+      <div class="option-card selected" data-cat="all"><span class="icon">📚</span><div class="title">全範囲</div><div class="desc">裁判所 + 国会</div></div>
+      <div class="option-card" data-cat="裁判所"><span class="icon">⚖️</span><div class="title">裁判所</div><div class="desc">司法・刑事手続き・死刑制度など</div></div>
+      <div class="option-card" data-cat="国会"><span class="icon">🏛️</span><div class="title">国会</div><div class="desc">二院制・国会機能・衆院優越など</div></div>
+    </div>
+
+    <div class="section-label">出題モード</div>
+    <div class="option-grid">
+      <div class="option-card selected" data-mode="all"><span class="icon">📝</span><div class="title">全問を解く</div><div class="desc">選択範囲の全問題</div></div>
+      <div class="wrong-only-card disabled" id="mode-wrong-card">
+        <div class="title">⚠️ 前回間違えた問題だけ</div>
+        <div class="desc" id="wrong-count-desc">間違えた問題はありません</div>
+      </div>
+    </div>
+
+    <button class="btn-start" id="btn-start">学習を開始する</button>
+    <button class="btn-reset" id="btn-reset">履歴をクリア</button>
+  </div>
+
+  <!-- 問題画面 -->
+  <div id="screen-quiz" class="hidden">
+    <div class="quiz-header">
+      <div class="quiz-progress">問題 <span class="num" id="cur-num">1</span> / <span id="total-num">10</span></div>
+      <div class="quiz-progress" id="score-display">◯ <span id="ok-count">0</span> / ✗ <span id="ng-count">0</span></div>
+    </div>
+    <div class="progress-bar"><div id="progress-fill" style="width: 0%"></div></div>
+    <div class="quiz-card" id="quiz-card">
+      <!-- 問題は動的に挿入 -->
+    </div>
+    <div class="quiz-actions">
+      <button class="btn btn-secondary" id="btn-quit">中止</button>
+      <button class="btn btn-primary" id="btn-next" disabled>解答する</button>
+    </div>
+  </div>
+
+  <!-- 結果画面 -->
+  <div id="screen-result" class="screen-result hidden">
+    <div class="result-icon" id="result-icon">🎯</div>
+    <h2 id="result-title">お疲れさまでした!</h2>
+    <div class="result-score"><span id="result-correct">0</span><small> / <span id="result-total">0</span> 問正解</small></div>
+    <div class="result-msg" id="result-msg"></div>
+    <div class="result-detail" id="result-detail"></div>
+    <div class="result-actions">
+      <button class="btn btn-primary" id="btn-retry-wrong">間違えた問題だけ</button>
+      <button class="btn btn-secondary" id="btn-retry-all">全問もう一度</button>
+      <button class="btn btn-secondary" id="btn-back-home">スタートに戻る</button>
+    </div>
+    <div class="wrong-list" id="wrong-list"></div>
+  </div>
+</main>
+
+<script>
+// ============================================================
+// 問題データ (サーバー側から注入)
+// ============================================================
+const ALL_QUESTIONS = [
+  {
+    "id": "q001",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "fill",
+    "segments": [
+      "憲法76条1項: すべて",
+      {
+        "b": "司法権",
+        "h": "裁判を行う権限"
+      },
+      "は、",
+      {
+        "b": "最高裁判所",
+        "h": "司法権の最高機関"
+      },
+      "及び法律の定めるところにより設置する",
+      {
+        "b": "下級裁判所",
+        "h": "最高裁判所以外の裁判所の総称"
+      },
+      "に属する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q002",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "fill",
+    "segments": [
+      "特別裁判所は、これを",
+      {
+        "b": "設置することができない",
+        "h": "特別裁判所の禁止"
+      },
+      "。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q003",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "fill",
+    "segments": [
+      "行政機関は、",
+      {
+        "b": "終審",
+        "h": "最終審"
+      },
+      "として裁判を行うことはできない。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q004",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "fill",
+    "segments": [
+      "すべて裁判官は、その",
+      {
+        "b": "良心",
+        "h": "内心の規範"
+      },
+      "に従い",
+      {
+        "b": "独立",
+        "h": "他からの干渉を受けないこと"
+      },
+      "してその職権を行い、この憲法及び法律にのみ拘束される。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q005",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "choice",
+    "question": "大津事件が起きた年は?",
+    "choices": [
+      "1891年",
+      "1948年",
+      "1983年",
+      "1992年"
+    ],
+    "correct": 0,
+    "explanation": "大津事件は1891年、ロシア皇太子ニコライが警備の巡査に切りつけられた事件。"
+  },
+  {
+    "id": "q006",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "choice",
+    "question": "大津事件で裁判官を説得し、裁判官の独立を侵したとされる大審院院長は?",
+    "choices": [
+      "尾島唯謙",
+      "兒島惟謙",
+      "三島通陽",
+      "伊藤博文"
+    ],
+    "correct": 1,
+    "explanation": "大審院院長・兒島惟謙(こじまただかね)が裁判官を説得。"
+  },
+  {
+    "id": "q007",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "choice",
+    "question": "浦和事件が起きた年は?",
+    "choices": [
+      "1891年",
+      "1948年",
+      "1983年",
+      "2008年"
+    ],
+    "correct": 1,
+    "explanation": "1948年に発生。参議院法務委員会が国政調査権を発動して判決を非難した事件。"
+  },
+  {
+    "id": "q008",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "fill",
+    "segments": [
+      "浦和事件で参議院法務委員会は",
+      {
+        "b": "国政調査権",
+        "h": "国会が国政を調査する権限"
+      },
+      "を発動し、封建的な思想に基づくとして判決を非難した。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q009",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "fill",
+    "segments": [
+      "裁判官は、",
+      {
+        "b": "弾劾",
+        "h": "国会による罷免手続"
+      },
+      "によらなければ罷免されない(憲法78条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q010",
+    "cat": "裁判所",
+    "sub": "司法権の独立",
+    "type": "fill",
+    "segments": [
+      "裁判官の懲戒処分は、",
+      {
+        "b": "行政機関",
+        "h": "内閣などの行政"
+      },
+      "がこれを行うことはできない。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q011",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "最高裁判所は長官を含めて",
+      {
+        "b": "15",
+        "h": "最高裁判所の判事の定数"
+      },
+      "名の判事からなる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q012",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "最高裁判所は",
+      {
+        "b": "総審",
+        "h": "全裁判官で構成"
+      },
+      "の裁判所であり、「憲法の番人」と呼ばれる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q013",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "最高裁判所は司法の独立性を守るための",
+      {
+        "b": "規則制定権",
+        "h": "裁判手続等に関するルール制定"
+      },
+      "や下級裁判所の裁判官指名権などの",
+      {
+        "b": "司法行政権",
+        "h": "裁判所の運営に関する権限"
+      },
+      "を持つ。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q014",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "最高裁判所の長たる裁判官以外の裁判官は、",
+      {
+        "b": "内閣",
+        "h": "行政の頂点"
+      },
+      "でこれを任命する(憲法79条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q015",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "最高裁判所の裁判官の任命後初めて行われる衆議院議員総選挙の際、",
+      {
+        "b": "国民審査",
+        "h": "国民による審査"
+      },
+      "に付される。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q016",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "最高裁判所の裁判官は、その後",
+      {
+        "b": "10",
+        "h": "審査間隔の年数"
+      },
+      "年を経過した後初めて行われる衆議院議員総選挙の際さらに審査に付される。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q017",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "憲法81条: 最高裁判所は、一切の法律、命令、規則又は処分が憲法に適合するかしないかを決定する権限を有する",
+      {
+        "b": "終審裁判所",
+        "h": "最終審の裁判所"
+      },
+      "である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q018",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "choice",
+    "question": "高等裁判所は全国に何カ所あるか?",
+    "choices": [
+      "4カ所",
+      "8カ所",
+      "50カ所",
+      "438カ所"
+    ],
+    "correct": 1,
+    "explanation": "高等裁判所: 札幌・仙台・東京・名古屋・大阪・広島・高松・福岡の8カ所"
+  },
+  {
+    "id": "q019",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "知的財産高等裁判所は",
+      {
+        "b": "東京高等裁判所",
+        "h": "知的財産事件を扱う高裁"
+      },
+      "の支部として2005年に設置された。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q020",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "地方裁判所は各都府県に1カ所、北海道に4カ所の合計",
+      {
+        "b": "50",
+        "h": "全国の地裁の数"
+      },
+      "カ所ある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q021",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "家庭裁判所は各都府県に1カ所、北海道に4カ所の合計",
+      {
+        "b": "50",
+        "h": "全国の家裁の数"
+      },
+      "カ所ある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q022",
+    "cat": "裁判所",
+    "sub": "裁判所の組織",
+    "type": "fill",
+    "segments": [
+      "簡易裁判所は全国に",
+      {
+        "b": "438",
+        "h": "簡裁の数"
+      },
+      "カ所ある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q023",
+    "cat": "裁判所",
+    "sub": "裁判の種類",
+    "type": "choice",
+    "question": "私人間の生活関係上の紛争を解決する裁判は?",
+    "choices": [
+      "民事裁判",
+      "刑事裁判",
+      "行政裁判",
+      "家庭裁判"
+    ],
+    "correct": 0,
+    "explanation": "民事裁判: 契約違反・財産の争い・離婚など私人間の紛争を解決。"
+  },
+  {
+    "id": "q024",
+    "cat": "裁判所",
+    "sub": "裁判の種類",
+    "type": "fill",
+    "segments": [
+      "民事裁判の原告と被告はどちらも",
+      {
+        "b": "私人",
+        "h": "個人や法人"
+      },
+      "である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q025",
+    "cat": "裁判所",
+    "sub": "裁判の種類",
+    "type": "choice",
+    "question": "刑法に抵触する事件(犯罪)の裁判で、検察官が被疑者を起訴するのは?",
+    "choices": [
+      "民事裁判",
+      "刑事裁判",
+      "行政裁判",
+      "少年保護事件"
+    ],
+    "correct": 1,
+    "explanation": "刑事裁判: 検察官が起訴を行い、裁判官が有罪無罪を判断する。"
+  },
+  {
+    "id": "q026",
+    "cat": "裁判所",
+    "sub": "裁判の種類",
+    "type": "fill",
+    "segments": [
+      "刑事裁判では",
+      {
+        "b": "検察官",
+        "h": "国側の立場で起訴・立証"
+      },
+      "が被疑者を裁判所に起訴する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q027",
+    "cat": "裁判所",
+    "sub": "裁判の種類",
+    "type": "fill",
+    "segments": [
+      "検察庁は",
+      {
+        "b": "法務省",
+        "h": "行政機関の一つ"
+      },
+      "の「特別の機関」である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q028",
+    "cat": "裁判所",
+    "sub": "裁判の種類",
+    "type": "fill",
+    "segments": [
+      "最高検察庁の長は",
+      {
+        "b": "検事総長",
+        "h": "検察庁のトップ"
+      },
+      "である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q029",
+    "cat": "裁判所",
+    "sub": "裁判の種類",
+    "type": "fill",
+    "segments": [
+      "検察官は、上級検察官の指揮・監督に服すという原則を",
+      {
+        "b": "検察官一体の原則",
+        "h": "検察組織の基本原則"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q030",
+    "cat": "裁判所",
+    "sub": "公正な裁判",
+    "type": "fill",
+    "segments": [
+      "国民の基本的人権を守り、誤りのない公平で慎重な裁判を行うため、",
+      {
+        "b": "三審制",
+        "h": "3回の審理段階"
+      },
+      "がとられている。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q031",
+    "cat": "裁判所",
+    "sub": "公正な裁判",
+    "type": "fill",
+    "segments": [
+      "第一審の判決に不服があれば",
+      {
+        "b": "控訴",
+        "h": "第二審への上訴"
+      },
+      "でき、さらに不服があれば",
+      {
+        "b": "上告",
+        "h": "第三審への上訴"
+      },
+      "できる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q032",
+    "cat": "裁判所",
+    "sub": "公正な裁判",
+    "type": "fill",
+    "segments": [
+      "判決が確定した後も、合理的な疑いが生じる証拠が発見された場合、",
+      {
+        "b": "再審",
+        "h": "判決確定後のやり直し"
+      },
+      "を請求できる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q033",
+    "cat": "裁判所",
+    "sub": "公正な裁判",
+    "type": "fill",
+    "segments": [
+      "判決ではなく、命令・決定に対する上級裁判所への不服の申立てを",
+      {
+        "b": "抗告",
+        "h": "決定・命令に対する不服申立て"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q034",
+    "cat": "裁判所",
+    "sub": "公正な裁判",
+    "type": "fill",
+    "segments": [
+      "憲法82条: 裁判は",
+      {
+        "b": "公開",
+        "h": "誰でも傍聴できる原則"
+      },
+      "されなければならない。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q035",
+    "cat": "裁判所",
+    "sub": "公正な裁判",
+    "type": "fill",
+    "segments": [
+      "裁判の公開の例外として、",
+      {
+        "b": "政治犯",
+        "h": "政治に関する犯罪"
+      },
+      "の場合は必ず公開しなければならない。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q036",
+    "cat": "裁判所",
+    "sub": "公正な裁判",
+    "type": "fill",
+    "segments": [
+      "家庭裁判所は",
+      {
+        "b": "プライバシー",
+        "h": "私生活上の秘密"
+      },
+      "に関わるものが多いため、非公開のものが多い。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q037",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "人身の自由を保障する2本柱のひとつ「罪刑法定主義」: 何が犯罪で、どんな刑罰が科されるかは、",
+      {
+        "b": "法律",
+        "h": "国会が定めるもの"
+      },
+      "で事前に定められていなければならない。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q038",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "「法定の手続の保障」は",
+      {
+        "b": "適正手続",
+        "h": "デュープロセス"
+      },
+      "主義とも言う。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q039",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "被疑者・被告人は有罪確定まで無罪扱いされる原則を",
+      {
+        "b": "推定無罪",
+        "h": "無罪が推定される"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q040",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "刑事裁判の原則「疑わしきは",
+      {
+        "b": "被告人の利益に",
+        "h": "疑いが残る場合は被告側へ"
+      },
+      "」"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q041",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "起訴前の被疑者には、第34条で",
+      {
+        "b": "弁護人依頼権",
+        "h": "弁護士を選ぶ権利"
+      },
+      "が保障されている。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q042",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "逮捕・捜索・押収などの強制処分を行う場合、司法機関の",
+      {
+        "b": "令状",
+        "h": "裁判所が発行する許可書"
+      },
+      "が必要な原則を令状主義という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q043",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "令状主義の例外として",
+      {
+        "b": "現行犯逮捕",
+        "h": "現に行われている犯罪の逮捕"
+      },
+      "がある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q044",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "第38条で保障された、取り調べや裁判で自分に不利益な供述を強制されない権利を",
+      {
+        "b": "黙秘権",
+        "h": "供述を拒否する権利"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q045",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "憲法36条で禁止されているのは",
+      {
+        "b": "拷問",
+        "h": "肉体的・精神的苦痛による自白強要"
+      },
+      "と残虐な刑罰である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q046",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "起訴後の被告人は、公平で迅速な",
+      {
+        "b": "公開裁判",
+        "h": "誰でも傍聴できる裁判"
+      },
+      "を受ける権利がある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q047",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "判決が確定した事件は、再度裁判を行ってはならない原則を",
+      {
+        "b": "一事不再理",
+        "h": "同一事件の再審理禁止"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q048",
+    "cat": "裁判所",
+    "sub": "刑事手続きの人権保障",
+    "type": "fill",
+    "segments": [
+      "ある行為が行われた時に処罰する法律がなかった場合、後から定めた法律でその行為を罰してはいけない原則を",
+      {
+        "b": "遡及処罰の禁止",
+        "h": "事後法の禁止"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q049",
+    "cat": "裁判所",
+    "sub": "冤罪事件",
+    "type": "choice",
+    "question": "免田事件で死刑囚として初めて再審無罪を勝ち取った年は?",
+    "choices": [
+      "1948年",
+      "1983年",
+      "2008年",
+      "2023年"
+    ],
+    "correct": 1,
+    "explanation": "1983年に再審無罪。事件発生から34年が経過していた。"
+  },
+  {
+    "id": "q050",
+    "cat": "裁判所",
+    "sub": "冤罪事件",
+    "type": "fill",
+    "segments": [
+      "免田事件の免田栄さんは、刑事補償法に基づき12,599日の拘禁に対して",
+      {
+        "b": "9071万2800",
+        "h": "刑事補償金額(円)"
+      },
+      "円が支払われた(1日7200円)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q051",
+    "cat": "裁判所",
+    "sub": "冤罪事件",
+    "type": "choice",
+    "question": "袴田事件で証拠となった「5点の衣類」はどこから発見されたか?",
+    "choices": [
+      "工場のムシタンク",
+      "警察の証拠保管庫",
+      "裁判所の地下",
+      "自宅の押入れ"
+    ],
+    "correct": 0,
+    "explanation": "事件発生から1年2ヶ月後、工場のムシタンクから発見された。"
+  },
+  {
+    "id": "q052",
+    "cat": "裁判所",
+    "sub": "冤罪事件",
+    "type": "choice",
+    "question": "袴田事件で再審無罪判決が言い渡された年は?",
+    "choices": [
+      "2008年",
+      "2014年",
+      "2023年",
+      "2024年"
+    ],
+    "correct": 3,
+    "explanation": "2024年に結審、判決は2024年9月26日に言い渡された。"
+  },
+  {
+    "id": "q053",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "fill",
+    "segments": [
+      "死刑になる恐れのある犯罪は",
+      {
+        "b": "19",
+        "h": "死刑対象犯罪の数"
+      },
+      "種類ある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q054",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "choice",
+    "question": "最高裁が死刑を求刑する際に考慮すべき基準として1983年に示したものは?",
+    "choices": [
+      "永山基準",
+      "名張基準",
+      "飯塚基準",
+      "光市基準"
+    ],
+    "correct": 0,
+    "explanation": "永山基準(1983年): 犯行内容・動機・殺害方法・結果の重大性・殺害人数・遺族の被害感情・社会的影響・犯人の年齢・前科などを総合考慮。"
+  },
+  {
+    "id": "q055",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "fill",
+    "segments": [
+      "永山基準では、命を奪われたのが1人なら",
+      {
+        "b": "無期懲役",
+        "h": "1人の場合の目安"
+      },
+      "、3人以上なら死刑、2人はボーダーラインとされる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q056",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "choice",
+    "question": "死刑廃止国は世界に何カ国あるか(2022年時点)?",
+    "choices": [
+      "54カ国",
+      "108カ国",
+      "145カ国",
+      "190カ国"
+    ],
+    "correct": 2,
+    "explanation": "死刑廃止国は145カ国(うち通常犯罪のみ廃止が122カ国、事実上廃止が23カ国)"
+  },
+  {
+    "id": "q057",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "fill",
+    "segments": [
+      "OECD加盟国38か国のうち、死刑を存置しているのはアメリカと",
+      {
+        "b": "日本",
+        "h": "アメリカと並んで死刑存置のOECD国"
+      },
+      "のみである。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q058",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "fill",
+    "segments": [
+      "日本が死刑を存置する理由は、",
+      {
+        "b": "世論調査",
+        "h": "国民の意見を調べるもの"
+      },
+      "による、国民の多くが死刑を残すべきという意見による。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q059",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "fill",
+    "segments": [
+      "日本では明治6年から",
+      {
+        "b": "絞首刑",
+        "h": "首を絞める執行方法"
+      },
+      "が死刑執行方法として採られている。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q060",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "fill",
+    "segments": [
+      "憲法36条: 公務員による拷問及び",
+      {
+        "b": "残酷な刑罰",
+        "h": "非人道的な刑罰"
+      },
+      "は、絶対にこれを禁ずる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q061",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "choice",
+    "question": "飯塚事件で死刑が執行されたのは何年か?",
+    "choices": [
+      "1992年",
+      "1999年",
+      "2008年",
+      "2024年"
+    ],
+    "correct": 2,
+    "explanation": "2008年10月に福岡拘置所で死刑執行。"
+  },
+  {
+    "id": "q062",
+    "cat": "裁判所",
+    "sub": "死刑制度",
+    "type": "fill",
+    "segments": [
+      "死刑制度の問題点のひとつ「冤罪による死刑執行のリスク」は、飯塚事件などで",
+      {
+        "b": "DNA鑑定",
+        "h": "科学的証拠手法"
+      },
+      "の誤りが発覚したことで指摘された。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q063",
+    "cat": "裁判所",
+    "sub": "違憲法令審査権",
+    "type": "fill",
+    "segments": [
+      "日本の違憲法令審査の方針は",
+      {
+        "b": "付随的違憲審査制",
+        "h": "具体的な裁判で審査"
+      },
+      "(具体的違憲審査制)である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q064",
+    "cat": "裁判所",
+    "sub": "違憲法令審査権",
+    "type": "fill",
+    "segments": [
+      "付随的違憲審査制では、",
+      {
+        "b": "すべての裁判所",
+        "h": "審査権を持つ主体"
+      },
+      "が違憲審査権を持つ。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q065",
+    "cat": "裁判所",
+    "sub": "違憲法令審査権",
+    "type": "fill",
+    "segments": [
+      "特別の憲法裁判所が専門に違憲審査する制度を",
+      {
+        "b": "抽象的違憲審査制",
+        "h": "抽象的に審査する制度"
+      },
+      "という(韓国、独、仏などで採用)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q066",
+    "cat": "裁判所",
+    "sub": "違憲法令審査権",
+    "type": "fill",
+    "segments": [
+      "高度に政治的行為は司法審査の対象としないという理論を",
+      {
+        "b": "統治行為論",
+        "h": "政治問題の法理"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q067",
+    "cat": "裁判所",
+    "sub": "違憲法令審査権",
+    "type": "choice",
+    "question": "統治行為論の代表的な判例である苫米地事件は何年か?",
+    "choices": [
+      "1891年",
+      "1948年",
+      "1983年",
+      "2008年"
+    ],
+    "correct": 1,
+    "explanation": "苫米地事件(1948年): 天皇の国事行為として内閣が衆議院を解散したことへの訴訟。"
+  },
+  {
+    "id": "q068",
+    "cat": "裁判所",
+    "sub": "違憲法令審査権",
+    "type": "fill",
+    "segments": [
+      "日本の裁判所は統治行為論を採るため、",
+      {
+        "b": "司法消極主義",
+        "h": "司法が控えめな姿勢"
+      },
+      "と言われる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q069",
+    "cat": "裁判所",
+    "sub": "司法権の民主的統制",
+    "type": "fill",
+    "segments": [
+      "司法権の民主的統制のひとつ: 最高裁判所裁判官の",
+      {
+        "b": "国民審査",
+        "h": "国民による審査"
+      },
+      "制度。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q070",
+    "cat": "裁判所",
+    "sub": "司法権の民主的統制",
+    "type": "fill",
+    "segments": [
+      "裁判官の職務上の義務違反を裁くため、衆参両院各7名で構成される",
+      {
+        "b": "弾劾裁判",
+        "h": "国会による裁判官罷免"
+      },
+      "が開かれる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q071",
+    "cat": "裁判所",
+    "sub": "司法権の民主的統制",
+    "type": "fill",
+    "segments": [
+      "検察官が不起訴とした判断に被疑者から納得できない場合、11人の",
+      {
+        "b": "検察審査会",
+        "h": "検察の判断を審査する機関"
+      },
+      "が審査する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q072",
+    "cat": "裁判所",
+    "sub": "司法権の民主的統制",
+    "type": "fill",
+    "segments": [
+      "検察審査会で同じ事件に2回、11人中8人以上が起訴を支持した場合、指定弁護士が",
+      {
+        "b": "強制起訴",
+        "h": "検察官でなく指定弁護士が起訴"
+      },
+      "する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q073",
+    "cat": "裁判所",
+    "sub": "少年法改正",
+    "type": "fill",
+    "segments": [
+      "2022年の成年齢引き下げ(18歳成年)に伴い、18・19歳を",
+      {
+        "b": "特定少年",
+        "h": "18・19歳の呼称"
+      },
+      "とした。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q074",
+    "cat": "裁判所",
+    "sub": "少年法改正",
+    "type": "fill",
+    "segments": [
+      "特定少年事件は、",
+      {
+        "b": "逆送",
+        "h": "家庭裁判所から検察官への送致"
+      },
+      "決定後は20歳以上の者と同様に扱われる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q075",
+    "cat": "裁判所",
+    "sub": "少年法改正",
+    "type": "fill",
+    "segments": [
+      "18歳以上で、逆送後に起訴された場合には、特定少年でも",
+      {
+        "b": "実名報道",
+        "h": "氏名を公に報道すること"
+      },
+      "が解禁される。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q076",
+    "cat": "裁判所",
+    "sub": "司法取引",
+    "type": "choice",
+    "question": "司法取引制度は何年に施行されたか?",
+    "choices": [
+      "2009年",
+      "2018年",
+      "2019年",
+      "2022年"
+    ],
+    "correct": 1,
+    "explanation": "司法取引は2018年6月に施行された。"
+  },
+  {
+    "id": "q077",
+    "cat": "裁判所",
+    "sub": "司法取引",
+    "type": "fill",
+    "segments": [
+      "司法取引の対象は",
+      {
+        "b": "経済・銃器",
+        "h": "対象となる犯罪分野"
+      },
+      "に関すること犯罪である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q078",
+    "cat": "裁判所",
+    "sub": "司法取引",
+    "type": "fill",
+    "segments": [
+      "司法取引では被疑者が共犯者の供述や証拠提出に協力する代わりに、検察官は不起訴にしたり",
+      {
+        "b": "刑事責任",
+        "h": "刑罰上の責任"
+      },
+      "を減免し保証する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q079",
+    "cat": "裁判所",
+    "sub": "司法取引",
+    "type": "fill",
+    "segments": [
+      "司法取引の課題として、",
+      {
+        "b": "黙秘権",
+        "h": "供述拒否権"
+      },
+      "の侵害や冤罪の増加、客観的な証拠集めがおろそかになる恐れがある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q080",
+    "cat": "裁判所",
+    "sub": "取り調べの可視化",
+    "type": "choice",
+    "question": "取り調べの可視化(録音・録画)は何年から一般化したか?",
+    "choices": [
+      "2009年",
+      "2018年",
+      "2019年",
+      "2022年"
+    ],
+    "correct": 2,
+    "explanation": "2019年6月から改正刑事訴訟法が施行され一般化。"
+  },
+  {
+    "id": "q081",
+    "cat": "裁判所",
+    "sub": "取り調べの可視化",
+    "type": "fill",
+    "segments": [
+      "取り調べの可視化は、",
+      {
+        "b": "裁判員裁判",
+        "h": "裁判員が参加する裁判"
+      },
+      "の対象事件や検察官が独自に捜査する事件の取調べを原則撮影する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q082",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "choice",
+    "question": "裁判員制度は何年から開始されたか?",
+    "choices": [
+      "1999年",
+      "2009年",
+      "2018年",
+      "2024年"
+    ],
+    "correct": 1,
+    "explanation": "裁判員制度は2009年から開始。"
+  },
+  {
+    "id": "q083",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "fill",
+    "segments": [
+      "裁判員裁判は裁判官3人と",
+      {
+        "b": "裁判員6人",
+        "h": "一般国民6名"
+      },
+      "で重大な刑事事件の第一審を審理する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q084",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "choice",
+    "question": "アメリカの陪審制と日本の裁判員制度の違いは?",
+    "choices": [
+      "陪審員は量刑も判断する",
+      "陪審員は有罪無罪のみ判断し量刑は裁判官が判断",
+      "陪審員はいない",
+      "陪審員は終身制"
+    ],
+    "correct": 1,
+    "explanation": "陪審制(米): 陪審員が有罪/無罪のみを判断し、量刑は裁判官が判断。裁判員制度は両方を判断。"
+  },
+  {
+    "id": "q085",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "choice",
+    "question": "ドイツ・フランスで採用されている制度は?",
+    "choices": [
+      "陪審制",
+      "参審制",
+      "裁判員制度",
+      "弾劾制"
+    ],
+    "correct": 1,
+    "explanation": "参審制(独・仏): 裁判官と参審員で評議し、有罪/無罪と量刑を判断。任期制。"
+  },
+  {
+    "id": "q086",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "fill",
+    "segments": [
+      "裁判員の選出は",
+      {
+        "b": "選挙人名簿",
+        "h": "有権者名簿"
+      },
+      "より抽選で行われる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q087",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "fill",
+    "segments": [
+      "裁判員の公務を辞退できる人として、通知段階では",
+      {
+        "b": "学生",
+        "h": "学校に在籍する者"
+      },
+      "や70歳以上の国民などが該当する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q088",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "fill",
+    "segments": [
+      "評議は",
+      {
+        "b": "多数決",
+        "h": "過半数の賛成"
+      },
+      "が原則だが、裁判員のみで被告人に不利な判決は下せない。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q089",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "fill",
+    "segments": [
+      "有罪判決には",
+      {
+        "b": "裁判官",
+        "h": "職業裁判官"
+      },
+      "を含む賛成が必要である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q090",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "fill",
+    "segments": [
+      "量刑では、",
+      {
+        "b": "重い方",
+        "h": "より重い刑罰"
+      },
+      "から人数を加える必要がある。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q091",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "fill",
+    "segments": [
+      "裁判員には評議の秘密とその他職務上知り得た秘密を守る",
+      {
+        "b": "守秘義務",
+        "h": "秘密を守る義務"
+      },
+      "が生じる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q092",
+    "cat": "裁判所",
+    "sub": "裁判員制度",
+    "type": "choice",
+    "question": "2024年度の裁判員裁判対象事件数は全体の何%か?",
+    "choices": [
+      "約1.3%",
+      "約13%",
+      "約50%",
+      "約87%"
+    ],
+    "correct": 0,
+    "explanation": "裁判員裁判対象事件は889件/69,652件で約1.3%。"
+  },
+  {
+    "id": "q093",
+    "cat": "国会",
+    "sub": "国会の地位",
+    "type": "fill",
+    "segments": [
+      "憲法41条: 国会は、",
+      {
+        "b": "国権",
+        "h": "国の統治権"
+      },
+      "の最高機関であって、国の",
+      {
+        "b": "唯一",
+        "h": "ただ一つ"
+      },
+      "の立法機関である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q094",
+    "cat": "国会",
+    "sub": "国会の組織",
+    "type": "fill",
+    "segments": [
+      "国会は、",
+      {
+        "b": "衆議院",
+        "h": "下院に相当"
+      },
+      "及び",
+      {
+        "b": "参議院",
+        "h": "上院に相当"
+      },
+      "の両議院でこれを構成する(二院制)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q095",
+    "cat": "国会",
+    "sub": "国会の組織",
+    "type": "fill",
+    "segments": [
+      "両議院は、",
+      {
+        "b": "全国民を代表",
+        "h": "国民全体の代表"
+      },
+      "する選挙された議員でこれを組織する(憲法43条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q096",
+    "cat": "国会",
+    "sub": "国会の組織",
+    "type": "fill",
+    "segments": [
+      "両議院の議員及び選挙人の資格について、人種・信条・性別・社会的身分・門地・教育・財産又は収入によって",
+      {
+        "b": "差別",
+        "h": "えこひいきすること"
+      },
+      "してはならない(憲法44条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q097",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "衆議院の定数は",
+      {
+        "b": "465",
+        "h": "2017年からの定数"
+      },
+      "名(2017年～)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q098",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "参議院の定数は",
+      {
+        "b": "248",
+        "h": "2022年からの定数"
+      },
+      "名(2022年～)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q099",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "衆議院の選出方法は",
+      {
+        "b": "小選挙区比例代表並立制",
+        "h": "2つの方式を並立"
+      },
+      "である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q100",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "衆議院の小選挙区の定数は",
+      {
+        "b": "289",
+        "h": "小選挙区の数"
+      },
+      "名、比例代表は",
+      {
+        "b": "176",
+        "h": "比例代表の定数"
+      },
+      "名である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q101",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "参議院の選挙区は全国を",
+      {
+        "b": "選挙区",
+        "h": "都道府県単位"
+      },
+      "に分け148名で、比例代表は",
+      {
+        "b": "100",
+        "h": "参院比例の定数"
+      },
+      "名である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q102",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "衆議院議員の任期は",
+      {
+        "b": "4",
+        "h": "衆院議員の任期年数"
+      },
+      "年(解散により任期終了)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q103",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "参議院議員の任期は",
+      {
+        "b": "6",
+        "h": "参院議員の任期年数"
+      },
+      "年で、3年ごとに",
+      {
+        "b": "半数改選",
+        "h": "半分ずつ選び直す"
+      },
+      "される。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q104",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "fill",
+    "segments": [
+      "衆議院議員の被選挙権は",
+      {
+        "b": "25",
+        "h": "衆院議員の最低年齢"
+      },
+      "歳以上、参議院は",
+      {
+        "b": "30",
+        "h": "参院議員の最低年齢"
+      },
+      "歳以上である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q105",
+    "cat": "国会",
+    "sub": "二院制",
+    "type": "choice",
+    "question": "参議院議員の任期と改選方法は?",
+    "choices": [
+      "4年・全員改選",
+      "6年・半数改選",
+      "4年・半数改選",
+      "6年・全員改選"
+    ],
+    "correct": 1,
+    "explanation": "参議院議員は任期6年・3年ごとに半数改選(解散なし)。"
+  },
+  {
+    "id": "q106",
+    "cat": "国会",
+    "sub": "国会の種類",
+    "type": "fill",
+    "segments": [
+      "毎年1回必ず召集される国会を",
+      {
+        "b": "通常国会",
+        "h": "常会"
+      },
+      "(憲法52条)という。会期は150日。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q107",
+    "cat": "国会",
+    "sub": "国会の種類",
+    "type": "fill",
+    "segments": [
+      "内閣の召集、またはいずれかの議院の総議員の4分の1以上の要求で開かれる国会を",
+      {
+        "b": "臨時国会",
+        "h": "臨時会"
+      },
+      "(憲法53条)という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q108",
+    "cat": "国会",
+    "sub": "国会の種類",
+    "type": "fill",
+    "segments": [
+      "衆議院解散後の総選挙の日から30日以内に召集される国会を",
+      {
+        "b": "特別国会",
+        "h": "特別会"
+      },
+      "(憲法54条)という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q109",
+    "cat": "国会",
+    "sub": "国会の種類",
+    "type": "fill",
+    "segments": [
+      "衆議院の解散中の緊急事態に、内閣の要求で開催されるものを",
+      {
+        "b": "参議院の緊急集会",
+        "h": "衆院解散中の緊急会議"
+      },
+      "という(憲法54条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q110",
+    "cat": "国会",
+    "sub": "国会の機能(固有)",
+    "type": "fill",
+    "segments": [
+      "国会固有の役割のひとつ: ",
+      {
+        "b": "法律案",
+        "h": "国会が制定する法規"
+      },
+      "の議決(憲法59条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q111",
+    "cat": "国会",
+    "sub": "国会の機能(固有)",
+    "type": "fill",
+    "segments": [
+      "国会の役割: ",
+      {
+        "b": "条約",
+        "h": "国家間の合意"
+      },
+      "の承認(憲法61条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q112",
+    "cat": "国会",
+    "sub": "国会の機能(固有)",
+    "type": "fill",
+    "segments": [
+      "国会の役割: ",
+      {
+        "b": "憲法改正",
+        "h": "国の最高法規の変更"
+      },
+      "の発議(憲法96条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q113",
+    "cat": "国会",
+    "sub": "国会の機能(固有)",
+    "type": "fill",
+    "segments": [
+      "内閣が予算を作成し、国会が",
+      {
+        "b": "予算",
+        "h": "国の歳出歳入の計画"
+      },
+      "の議決を行う(憲法60条)。これを財政統治権ともいう。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q114",
+    "cat": "国会",
+    "sub": "国会の機能(行政監督)",
+    "type": "fill",
+    "segments": [
+      "国会の行政監督権のひとつ: ",
+      {
+        "b": "内閣総理大臣",
+        "h": "内閣の長"
+      },
+      "の指名(憲法67条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q115",
+    "cat": "国会",
+    "sub": "国会の機能(行政監督)",
+    "type": "fill",
+    "segments": [
+      "衆参両院で異なった人物を指名し、両院協議会でも意見が一致しない場合、または衆議院が指名した後参議院が10日以内に指名しない場合は、",
+      {
+        "b": "衆議院",
+        "h": "優越する議院"
+      },
+      "の議決を国会の議決とする。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q116",
+    "cat": "国会",
+    "sub": "国会の機能(行政監督)",
+    "type": "fill",
+    "segments": [
+      "衆議院が今の内閣に任せられないと判断した時に出すものを",
+      {
+        "b": "内閣不信任決議",
+        "h": "内閣への不信任(憲法69条)"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q117",
+    "cat": "国会",
+    "sub": "国会の機能(行政監督)",
+    "type": "fill",
+    "segments": [
+      "参議院が内閣の責任を問うものを",
+      {
+        "b": "問責決議",
+        "h": "参院による責任追及"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q118",
+    "cat": "国会",
+    "sub": "国会の機能(行政監督)",
+    "type": "fill",
+    "segments": [
+      "国会が国政全般について調査を行う権限を",
+      {
+        "b": "国政調査権",
+        "h": "国政を調査する権限"
+      },
+      "(憲法62条)という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q119",
+    "cat": "国会",
+    "sub": "国会の機能(司法監督)",
+    "type": "fill",
+    "segments": [
+      "国会は裁判官の職務上の義務違反や非行を裁く",
+      {
+        "b": "弾劾裁判",
+        "h": "国会による裁判官罷免"
+      },
+      "の権限を持つ(憲法64条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q120",
+    "cat": "国会",
+    "sub": "国会の機能(司法監督)",
+    "type": "fill",
+    "segments": [
+      "裁判官訴追委員会は衆参各",
+      {
+        "b": "10",
+        "h": "訴追委員会の人数"
+      },
+      "人ずつ20名、弾劾裁判所は衆参各7人ずつ",
+      {
+        "b": "14",
+        "h": "弾劾裁判所の人数"
+      },
+      "名で構成される。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q121",
+    "cat": "国会",
+    "sub": "国会議員の特権",
+    "type": "fill",
+    "segments": [
+      "国会議員は国庫から相当額の",
+      {
+        "b": "歳費",
+        "h": "議員報酬"
+      },
+      "を受ける特権がある(憲法49条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q122",
+    "cat": "国会",
+    "sub": "国会議員の特権",
+    "type": "fill",
+    "segments": [
+      "国会の会期中は逮捕されない特権を",
+      {
+        "b": "不逮捕",
+        "h": "会期中の逮捕禁止"
+      },
+      "特権という(憲法50条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q123",
+    "cat": "国会",
+    "sub": "国会議員の特権",
+    "type": "fill",
+    "segments": [
+      "院内で行った演説・討論・評決に院外で責任を問われない特権を",
+      {
+        "b": "免責",
+        "h": "院内発言の責任免除"
+      },
+      "特権という(憲法51条)。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q124",
+    "cat": "国会",
+    "sub": "国会議員の特権",
+    "type": "choice",
+    "question": "不逮捕特権の例外は?",
+    "choices": [
+      "院内の現行犯と院外の現行犯",
+      "院外の現行犯と院外未結事件",
+      "院内の現行犯のみ",
+      "院外未結事件のみ"
+    ],
+    "correct": 1,
+    "explanation": "不逮捕特権の例外: 院外の現行犯と院外未結事件の場合は逮捕可能。"
+  },
+  {
+    "id": "q125",
+    "cat": "国会",
+    "sub": "国会運営の特徴",
+    "type": "fill",
+    "segments": [
+      "衆・参各17の常任委員会、必要な場合に設置するものを",
+      {
+        "b": "特別委員会",
+        "h": "特定案件のための委員会"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q126",
+    "cat": "国会",
+    "sub": "国会運営の特徴",
+    "type": "fill",
+    "segments": [
+      "総理はじめ全ての国務大臣が出席し、国政全般について審議する委員会は",
+      {
+        "b": "予算委員会",
+        "h": "予算を審議する委員会"
+      },
+      "である。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q127",
+    "cat": "国会",
+    "sub": "国会運営の特徴",
+    "type": "choice",
+    "question": "委員会中心主義のデメリットは?",
+    "choices": [
+      "議員の専門性が活かせる",
+      "能率的な運営",
+      "議員と業界の癒着、本会議の形骸化",
+      "迅速な審議"
+    ],
+    "correct": 2,
+    "explanation": "委員会中心主義のデメリット: 議員と業界の癒着、本会議の形骸化。"
+  },
+  {
+    "id": "q128",
+    "cat": "国会",
+    "sub": "衆議院の優越",
+    "type": "fill",
+    "segments": [
+      "衆議院にのみ認められている権限: ①内閣不信任決議権　②",
+      {
+        "b": "予算先議権",
+        "h": "衆院だけが持つ権限"
+      },
+      "。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q129",
+    "cat": "国会",
+    "sub": "衆議院の優越",
+    "type": "fill",
+    "segments": [
+      "法律案で両院の議決が異なった場合、参議院が60日以内に議決しない場合、衆議院で出席議員の",
+      {
+        "b": "3分の2",
+        "h": "再可決に必要な割合"
+      },
+      "以上の多数の賛成で再可決し、成立する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q130",
+    "cat": "国会",
+    "sub": "衆議院の優越",
+    "type": "fill",
+    "segments": [
+      "予算の議決・条約の承認・内閣総理大臣の指名で両院協議会でも一致できない場合、または参議院が30日以内に議決しない場合(内閣総理大臣指名の場合は10日以内)は、",
+      {
+        "b": "衆議院",
+        "h": "優越する議院"
+      },
+      "の議決を国会の議決とする。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q131",
+    "cat": "国会",
+    "sub": "衆議院の優越",
+    "type": "fill",
+    "segments": [
+      "衆参両院で議決が異なった場合に開かれ、意見を調整する会を",
+      {
+        "b": "両院協議会",
+        "h": "両院の意見調整機関"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q132",
+    "cat": "国会",
+    "sub": "衆議院の優越",
+    "type": "fill",
+    "segments": [
+      "両院協議会は、予算の議決・条約の承認・内閣総理大臣の指名では",
+      {
+        "b": "必ず",
+        "h": "開催義務"
+      },
+      "開かなければならない。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q133",
+    "cat": "国会",
+    "sub": "国会改革",
+    "type": "fill",
+    "segments": [
+      "国家の担う役割が大きくなり、内閣の仕事が多く複雑になった結果、国会や国会議員の地位が軽く見られている課題を",
+      {
+        "b": "行政国家化",
+        "h": "行政に権限が集中する現象"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q134",
+    "cat": "国会",
+    "sub": "国会改革",
+    "type": "fill",
+    "segments": [
+      "1999年に制定された対策を",
+      {
+        "b": "国会審議の活性化",
+        "h": "国会審議を活発にする法律"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q135",
+    "cat": "国会",
+    "sub": "国会改革",
+    "type": "fill",
+    "segments": [
+      "大臣不在のときに職務を代行するものを",
+      {
+        "b": "副大臣",
+        "h": "大臣を補佐する役職"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q136",
+    "cat": "国会",
+    "sub": "国会改革",
+    "type": "fill",
+    "segments": [
+      "大臣を助け、特定の政策の企画や政務を行うものを",
+      {
+        "b": "大臣政務官",
+        "h": "大臣を助ける政務職"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q137",
+    "cat": "国会",
+    "sub": "国会改革",
+    "type": "fill",
+    "segments": [
+      "政府委員制度の廃止により、委員会での審議の答弁は原則として",
+      {
+        "b": "大臣や副大臣",
+        "h": "政治任用の職"
+      },
+      "が行う。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q138",
+    "cat": "国会",
+    "sub": "国会改革",
+    "type": "fill",
+    "segments": [
+      "国家基本政策委員会を設置して、各党の党首が討議するものを",
+      {
+        "b": "党首討論",
+        "h": "党のトップ同士の議論"
+      },
+      "という。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q139",
+    "cat": "国会",
+    "sub": "国会改革の課題",
+    "type": "fill",
+    "segments": [
+      "本来の「",
+      {
+        "b": "良識の府",
+        "h": "参院の理想像"
+      },
+      "」としての参議院の役割が薄くなっていることが課題とされる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q140",
+    "cat": "国会",
+    "sub": "国会改革の課題",
+    "type": "fill",
+    "segments": [
+      "議員が提出する法案を",
+      {
+        "b": "議員立法",
+        "h": "議員提出の法案"
+      },
+      "というが、数は少なく成立率も低いことが課題とされる。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q141",
+    "cat": "国会",
+    "sub": "衆議院の選挙制度",
+    "type": "fill",
+    "segments": [
+      "小選挙区制では有権者は",
+      {
+        "b": "候補者名",
+        "h": "個人名"
+      },
+      "を記入して投票する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q142",
+    "cat": "国会",
+    "sub": "衆議院の選挙制度",
+    "type": "fill",
+    "segments": [
+      "比例代表制では有権者は",
+      {
+        "b": "政党名",
+        "h": "政党の名称"
+      },
+      "を記入して投票する。"
+    ],
+    "hint": ""
+  },
+  {
+    "id": "q143",
+    "cat": "国会",
+    "sub": "衆議院の選挙制度",
+    "type": "choice",
+    "question": "小選挙区比例代表並立制で全国の選挙区数は?",
+    "choices": [
+      "100",
+      "289",
+      "465",
+      "11"
+    ],
+    "correct": 1,
+    "explanation": "小選挙区は全国289、比例代表は全国11ブロック。"
+  },
+  {
+    "id": "q144",
+    "cat": "国会",
+    "sub": "参議院の選挙制度",
+    "type": "fill",
+    "segments": [
+      "参議院議員通常選挙は、選挙区と",
+      {
+        "b": "比例区",
+        "h": "全国1ブロックの比例"
+      },
+      "に分かれて行われる。"
+    ],
+    "hint": ""
+  }
+];
+
+// ============================================================
+// 状態管理
+// ============================================================
+const STORAGE_KEY_WRONG = 'comin_quiz_wrong_ids_v1';
+const STORAGE_KEY_TOTAL = 'comin_quiz_total_v1';
+
+let state = {
+  selectedCat: 'all',
+  selectedMode: 'all',
+  quizQuestions: [],
+  currentIndex: 0,
+  correctCount: 0,
+  wrongCount: 0,
+  wrongThisRound: [],
+  answered: false,
+  currentAnswer: null
+};
+
+// ============================================================
+// ユーティリティ
+// ============================================================
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function normalizeAnswer(s) {
+  return String(s).trim().replace(/\s+/g, '').replace(/[　]/g, '');
+}
+
+function loadWrongIds() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY_WRONG) || '[]');
+  } catch { return []; }
+}
+function saveWrongIds(ids) {
+  localStorage.setItem(STORAGE_KEY_WRONG, JSON.stringify(ids));
+}
+function addToWrong(qid) {
+  const ids = loadWrongIds();
+  if (!ids.includes(qid)) {
+    ids.push(qid);
+    saveWrongIds(ids);
+  }
+}
+function removeFromWrong(qid) {
+  const ids = loadWrongIds().filter(x => x !== qid);
+  saveWrongIds(ids);
+}
+function clearWrong() {
+  localStorage.removeItem(STORAGE_KEY_WRONG);
+  localStorage.removeItem(STORAGE_KEY_TOTAL);
+}
+
+// ============================================================
+// スタート画面
+// ============================================================
+function renderStartScreen() {
+  const wrongIds = loadWrongIds();
+  const wrongCard = document.getElementById('mode-wrong-card');
+  const wrongDesc = document.getElementById('wrong-count-desc');
+  if (wrongIds.length === 0) {
+    wrongCard.classList.add('disabled');
+    wrongDesc.textContent = '間違えた問題はありません';
+    if (state.selectedMode === 'wrong') {
+      state.selectedMode = 'all';
+      document.querySelectorAll('[data-mode]').forEach(c => c.classList.remove('selected'));
+      document.querySelector('[data-mode="all"]').classList.add('selected');
+    }
+  } else {
+    wrongCard.classList.remove('disabled');
+    wrongDesc.textContent = `${wrongIds.length} 問あります`;
+  }
+  document.getElementById('header-stats').textContent = `総問題数: ${ALL_QUESTIONS.length}`;
+}
+
+document.getElementById('cat-options').addEventListener('click', e => {
+  const card = e.target.closest('.option-card');
+  if (!card) return;
+  document.querySelectorAll('#cat-options .option-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  state.selectedCat = card.dataset.cat;
+});
+
+document.querySelectorAll('[data-mode]').forEach(el => {
+  el.addEventListener('click', () => {
+    if (el.id === 'mode-wrong-card' && el.classList.contains('disabled')) return;
+    document.querySelectorAll('[data-mode]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.selectedMode = el.dataset.mode || (el.id === 'mode-wrong-card' ? 'wrong' : 'all');
+  });
+});
+
+document.getElementById('btn-start').addEventListener('click', startQuiz);
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (confirm('学習履歴(間違えた問題リスト)をクリアしますか?')) {
+    clearWrong();
+    renderStartScreen();
+  }
+});
+
+// ============================================================
+// クイズ開始
+// ============================================================
+function startQuiz() {
+  let pool = ALL_QUESTIONS.slice();
+  if (state.selectedCat !== 'all') {
+    pool = pool.filter(q => q.cat === state.selectedCat);
+  }
+  if (state.selectedMode === 'wrong') {
+    const wrongIds = loadWrongIds();
+    pool = pool.filter(q => wrongIds.includes(q.id));
+    // 間違えた問題を正解したらリストから消すための記録
+  }
+  if (pool.length === 0) {
+    alert('出題できる問題がありません。');
+    return;
+  }
+  state.quizQuestions = shuffleArray(pool);
+  state.currentIndex = 0;
+  state.correctCount = 0;
+  state.wrongCount = 0;
+  state.wrongThisRound = [];
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function showScreen(name) {
+  document.getElementById('screen-start').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-' + name).classList.remove('hidden');
+}
+
+// ============================================================
+// 問題描画
+// ============================================================
+function renderQuestion() {
+  const q = state.quizQuestions[state.currentIndex];
+  state.answered = false;
+  state.currentAnswer = null;
+  document.getElementById('cur-num').textContent = state.currentIndex + 1;
+  document.getElementById('total-num').textContent = state.quizQuestions.length;
+  document.getElementById('ok-count').textContent = state.correctCount;
+  document.getElementById('ng-count').textContent = state.wrongCount;
+  document.getElementById('progress-fill').style.width = `${(state.currentIndex / state.quizQuestions.length) * 100}%`;
+
+  const card = document.getElementById('quiz-card');
+  card.innerHTML = '';
+
+  // メタ
+  const meta = document.createElement('div');
+  meta.className = 'quiz-meta';
+  meta.innerHTML = `<span class="tag">${q.cat}</span><span class="tag sub">${q.sub}</span>`;
+  card.appendChild(meta);
+
+  if (q.type === 'fill') {
+    renderFillQuestion(card, q);
+  } else {
+    renderChoiceQuestion(card, q);
+  }
+
+  // フィードバック領域
+  const fb = document.createElement('div');
+  fb.className = 'feedback';
+  fb.id = 'feedback';
+  card.appendChild(fb);
+
+  const btnNext = document.getElementById('btn-next');
+  btnNext.textContent = '解答する';
+  btnNext.disabled = true;
+}
+
+function renderFillQuestion(card, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  // ランダムに空欄にする箇所を選ぶ: 全ブランクのうち1〜2個を空欄に
+  const blankIndices = [];
+  q.segments.forEach((s, i) => { if (typeof s === 'object' && s.b) blankIndices.push(i); });
+  // 1問あたり最低1個、最大2個空欄 (ブランクが3つ以上なら2個、それ以下は全て)
+  let numBlanks = 1;
+  if (blankIndices.length >= 3) numBlanks = 2;
+  if (blankIndices.length >= 5) numBlanks = 3;
+  const shuffled = shuffleArray(blankIndices);
+  const chosenBlanks = new Set(shuffled.slice(0, numBlanks));
+
+  const blankData = []; // {id, answer, inputEl}
+
+  q.segments.forEach((seg, i) => {
+    if (typeof seg === 'string') {
+      text.appendChild(document.createTextNode(seg));
+    } else {
+      // blank candidate
+      if (chosenBlanks.has(i)) {
+        const wrap = document.createElement('span');
+        wrap.className = 'blank-input';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.dataset.answer = seg.b;
+        input.placeholder = '?';
+        input.autocomplete = 'off';
+        input.addEventListener('input', () => {
+          // 全ての空欄に何か入っていれば「解答する」有効化
+          const inputs = card.querySelectorAll('.blank-input input');
+          const allFilled = Array.from(inputs).every(x => x.value.trim() !== '');
+          document.getElementById('btn-next').disabled = !allFilled;
+        });
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && !document.getElementById('btn-next').disabled) {
+            document.getElementById('btn-next').click();
+          }
+        });
+        wrap.appendChild(input);
+        if (seg.h) {
+          const hint = document.createElement('span');
+          hint.className = 'blank-hint';
+          hint.textContent = '💡 ' + seg.h;
+          wrap.appendChild(hint);
+        }
+        text.appendChild(wrap);
+        blankData.push({ input, answer: seg.b });
+      } else {
+        // 答えをそのまま表示
+        const span = document.createElement('span');
+        span.style.fontWeight = '700';
+        span.style.color = 'var(--primary)';
+        span.style.background = 'var(--primary-light)';
+        span.style.padding = '2px 6px';
+        span.style.borderRadius = '4px';
+        span.textContent = seg.b;
+        text.appendChild(span);
+      }
+    }
+  });
+  card.appendChild(text);
+
+  // ブランク情報を保存
+  state.currentAnswer = { type: 'fill', blanks: blankData };
+  // フォーカス
+  setTimeout(() => { if (blankData[0]) blankData[0].input.focus(); }, 50);
+}
+
+function renderChoiceQuestion(card, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = q.question;
+  card.appendChild(text);
+
+  const choicesWrap = document.createElement('div');
+  choicesWrap.className = 'choices';
+
+  // 選択肢をシャッフル
+  const indexed = q.choices.map((c, i) => ({ text: c, isCorrect: i === q.correct }));
+  const shuffled = shuffleArray(indexed);
+
+  shuffled.forEach((ch, idx) => {
+    const div = document.createElement('div');
+    div.className = 'choice';
+    div.dataset.correct = ch.isCorrect;
+    const marker = document.createElement('div');
+    marker.className = 'marker';
+    marker.textContent = ['ア','イ','ウ','エ','オ','カ'][idx] || (idx+1);
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = ch.text;
+    div.appendChild(marker);
+    div.appendChild(label);
+    div.addEventListener('click', () => {
+      if (state.answered) return;
+      choicesWrap.querySelectorAll('.choice').forEach(c => c.classList.remove('selected'));
+      div.classList.add('selected');
+      state.currentAnswer = { type: 'choice', selectedDiv: div, isCorrect: ch.isCorrect };
+      document.getElementById('btn-next').disabled = false;
+    });
+    choicesWrap.appendChild(div);
+  });
+  card.appendChild(choicesWrap);
+}
+
+// ============================================================
+// 解答処理
+// ============================================================
+document.getElementById('btn-next').addEventListener('click', () => {
+  if (!state.answered) {
+    // 解答を採点
+    submitAnswer();
+  } else {
+    // 次の問題へ
+    nextQuestion();
+  }
+});
+
+function submitAnswer() {
+  state.answered = true;
+  const q = state.quizQuestions[state.currentIndex];
+  const fb = document.getElementById('feedback');
+  const btnNext = document.getElementById('btn-next');
+  let isCorrect = false;
+  let userAnswerStr = '';
+  let correctAnswerStr = '';
+
+  if (state.currentAnswer.type === 'fill') {
+    const blanks = state.currentAnswer.blanks;
+    let allCorrect = true;
+    const correctParts = [];
+    const userParts = [];
+    blanks.forEach(b => {
+      const user = normalizeAnswer(b.input.value);
+      const correct = normalizeAnswer(b.answer);
+      const wrap = b.input.closest('.blank-input');
+      if (user === correct) {
+        wrap.classList.add('answered', 'correct');
+      } else {
+        wrap.classList.add('answered', 'wrong');
+        allCorrect = false;
+      }
+      userParts.push(user);
+      correctParts.push(b.answer);
+    });
+    isCorrect = allCorrect;
+    userAnswerStr = userParts.join(' / ');
+    correctAnswerStr = correctParts.join(' / ');
+  } else if (state.currentAnswer.type === 'choice') {
+    const selDiv = state.currentAnswer.selectedDiv;
+    if (state.currentAnswer.isCorrect) {
+      selDiv.classList.add('correct');
+      isCorrect = true;
+      userAnswerStr = selDiv.querySelector('.label').textContent;
+    } else {
+      selDiv.classList.add('wrong');
+      // 正解の選択肢もハイライト
+      document.querySelectorAll('.choice').forEach(c => {
+        if (c.dataset.correct === 'true') c.classList.add('correct');
+      });
+      userAnswerStr = selDiv.querySelector('.label').textContent;
+    }
+    document.querySelectorAll('.choice').forEach(c => c.style.pointerEvents = 'none');
+    correctAnswerStr = q.choices[q.correct];
+  }
+
+  if (isCorrect) {
+    state.correctCount++;
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '<div class="answer-line">✓ 正解!</div>';
+    // 間違えた問題リストから削除
+    removeFromWrong(q.id);
+  } else {
+    state.wrongCount++;
+    state.wrongThisRound.push({ id: q.id, q, userAnswer: userAnswerStr, correctAnswer: correctAnswerStr });
+    addToWrong(q.id);
+    let explHtml = '';
+    if (q.explanation) explHtml = `<div class="explanation">📝 ${q.explanation}</div>`;
+    if (state.currentAnswer.type === 'fill') {
+      // 全ブランクの正解を表示
+      const allBlanks = q.segments.filter(s => typeof s === 'object' && s.b).map(s => s.b);
+      const userBlanks = state.currentAnswer.blanks.map(b => normalizeAnswer(b.input.value));
+      fb.className = 'feedback show wrong';
+      fb.innerHTML = `
+        <div class="answer-line">✗ 不正解</div>
+        <div class="explanation">あなたの答え: ${userAnswerStr}<br>正解: ${correctAnswerStr}</div>
+        ${explHtml}
+      `;
+    } else {
+      fb.className = 'feedback show wrong';
+      fb.innerHTML = `
+        <div class="answer-line">✗ 不正解</div>
+        <div class="explanation">あなたの答え: ${userAnswerStr}<br>正解: ${correctAnswerStr}</div>
+        ${explHtml}
+      `;
+    }
+  }
+
+  btnNext.textContent = (state.currentIndex + 1 < state.quizQuestions.length) ? '次の問題へ →' : '結果を見る';
+  btnNext.disabled = false;
+
+  // スコア更新
+  document.getElementById('ok-count').textContent = state.correctCount;
+  document.getElementById('ng-count').textContent = state.wrongCount;
+}
+
+function nextQuestion() {
+  if (state.currentIndex + 1 < state.quizQuestions.length) {
+    state.currentIndex++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+// ============================================================
+// 結果画面
+// ============================================================
+function showResult() {
+  document.getElementById('progress-fill').style.width = '100%';
+  showScreen('result');
+  const total = state.quizQuestions.length;
+  const correct = state.correctCount;
+  const wrong = state.wrongCount;
+  document.getElementById('result-correct').textContent = correct;
+  document.getElementById('result-total').textContent = total;
+
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  let icon, msg;
+  if (pct === 100) { icon = '🏆'; msg = '全問正解!完璧です!'; }
+  else if (pct >= 80) { icon = '🌟'; msg = '素晴らしい!あと少しです。'; }
+  else if (pct >= 60) { icon = '👍'; msg = 'よく頑張りました。間違えた問題を復習しましょう。'; }
+  else if (pct >= 40) { icon = '💪'; msg = 'もう一度範囲を見直してみましょう。'; }
+  else { icon = '📚'; msg = '学習をやり直して、もう一度挑戦してみましょう。'; }
+  document.getElementById('result-icon').textContent = icon;
+  document.getElementById('result-msg').textContent = msg;
+
+  document.getElementById('result-detail').innerHTML = `
+    <div class="row"><span class="label">出題数</span><span class="val">${total} 問</span></div>
+    <div class="row"><span class="label">正解</span><span class="val" style="color:var(--success)">${correct} 問</span></div>
+    <div class="row"><span class="label">不正解</span><span class="val" style="color:var(--danger)">${wrong} 問</span></div>
+    <div class="row"><span class="label">正答率</span><span class="val">${pct} %</span></div>
+  `;
+
+  // 間違えた問題リスト表示
+  const wrongListEl = document.getElementById('wrong-list');
+  if (state.wrongThisRound.length > 0) {
+    let html = '<h3>今回間違えた問題</h3><ul>';
+    state.wrongThisRound.forEach(w => {
+      const qText = w.q.type === 'fill'
+        ? w.q.segments.map(s => typeof s === 'string' ? s : `【${s.b}】`).join('')
+        : w.q.question;
+      const shortText = qText.length > 80 ? qText.slice(0, 80) + '…' : qText;
+      html += `<li>[${w.q.cat} / ${w.q.sub}] ${shortText}<br>→ 正解: <b>${w.correctAnswer}</b></li>`;
+    });
+    html += '</ul>';
+    wrongListEl.innerHTML = html;
+    document.getElementById('btn-retry-wrong').style.display = '';
+  } else {
+    wrongListEl.innerHTML = '';
+    document.getElementById('btn-retry-wrong').style.display = 'none';
+  }
+}
+
+document.getElementById('btn-retry-wrong').addEventListener('click', () => {
+  state.selectedMode = 'wrong';
+  startQuiz();
+});
+document.getElementById('btn-retry-all').addEventListener('click', () => {
+  state.selectedMode = 'all';
+  startQuiz();
+});
+document.getElementById('btn-back-home').addEventListener('click', () => {
+  renderStartScreen();
+  showScreen('start');
+});
+document.getElementById('btn-quit').addEventListener('click', () => {
+  if (confirm('学習を中止してスタート画面に戻りますか?')) {
+    renderStartScreen();
+    showScreen('start');
+  }
+});
+
+// 初期化
+renderStartScreen();
+</script>
+</body>
+</html>
